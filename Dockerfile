@@ -3,7 +3,10 @@ FROM golang:1.24-alpine as builder
 ENV GO111MODULE=on \
     CGO_ENABLED=0 \
     GOOS=linux \
-    GOARCH=amd64
+    GOARCH=amd64 \
+    HTTP_PROXY=http://10.15.20.167:7890 \
+    HTTPS_PROXY=http://10.15.20.167:7890 \
+    GOPROXY=https://goproxy.cn,direc
 
 WORKDIR /build
 
