@@ -20,9 +20,6 @@ CMD ["./app"]
 
 FROM alpine:latest
 
-ENV HTTP_PROXY=http://10.15.20.167:7890 \
-    HTTPS_PROXY=http://10.15.20.167:7890 
-
 WORKDIR /app
 COPY --from=builder /build/app .
 EXPOSE 8181

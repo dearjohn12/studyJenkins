@@ -23,19 +23,24 @@ pipeline{
         stage("推送到harbor"){
             steps {
                 // 登录harbor镜像仓库
-                sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
-                // 给镜像打标签
-                sh "docker tag ${IMAGE_NAME} ${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG}"
-                // 推送到harbor
-                sh "docker push ${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG}"
-                // 登出
-                sh "docker logout"
+                sh '''
+                export HTTP_PROXY=http://10.15.20.167:7890
+                export HTTPS_PROXY=http://10.15.20.167:7890
+                docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+                docker tag ${IMAGE_NAME} ${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG}
+                docker push ${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG}
+                docker logout
+                '''
             }
         }
         stage ("远端服务器拉取镜像"){
             steps {
-                sh "ssh wangping@10.15.20.71 'docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}'"
-                sh "ssh wangping@10.15.20.71 'docker pull ${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG} '"
+                sh '''
+                export HTTP_PROXY=http://10.15.20.167:7890
+                export HTTPS_PROXY=http://10.15.20.167:7890
+                ssh wangping@10.15.20.71 'docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}'
+                ssh wangping@10.15.20.71 'docker pull ${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG}' 
+                '''
             }
         }
         stage("停止远端服务器上的旧容器"){
