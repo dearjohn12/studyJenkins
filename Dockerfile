@@ -5,7 +5,7 @@ ENV GO111MODULE=on \
     GOOS=linux \
     GOARCH=amd64 \
     HTTP_PROXY=http://10.15.20.167:7890 \
-    HTTPS_PROXY=http://10.15.20.167:7890 \
+    HTTPS_PROXY=http://10.15.20.167:7890 
 
 WORKDIR /build
 
